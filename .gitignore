@@ -1,0 +1,34 @@
+# Secretos (solo se suben los *.example)
+.env
+*.env
+!*.env.example
+application-local.yml
+application-local.properties
+
+# Java / Maven / Gradle
+target/
+build/
+.gradle/
+*.class
+*.jar
+!**/.mvn/wrapper/maven-wrapper.jar
+uploads/
+
+# Node / Electron
+node_modules/
+dist/
+out/
+*.log
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+*.code-workspace
+.settings/
+.project
+.classpath
+
+# Sistema
+.DS_Store
+Thumbs.db
