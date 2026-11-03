@@ -1,7 +1,8 @@
-# Pila de Dockge: /opt/stacks/litecraft/compose.yaml en fimosito
-# Las contraseñas van en el .env (copiar de .env.example). NO subir el .env al repo.
+# Pila de Dockge en fimosito: /opt/stacks/litecraft-db/compose.yaml
+# Las contraseñas van en el .env de la pila (copiar de .env.example). NO subir el .env al repo.
+# MariaDB solo lee estas variables la PRIMERA vez que arranca con ./data vacío.
 services:
-  litecraft_db:
+  mariadb-litecraft:
     image: mariadb:11.4
     container_name: litecraft_db
     restart: unless-stopped
@@ -17,13 +18,5 @@ services:
     ports:
       - "3307:3306"                      # el 3306 del host ya lo usa otro MariaDB
     volumes:
-      - litecraft_db_data:/var/lib/mysql
-      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
-    healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  litecraft_db_data:
+      - ./data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d   # aquí va schema.sql (solo se ejecuta con ./data vacío)
