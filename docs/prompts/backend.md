@@ -32,7 +32,7 @@ com.litecraft.api
 
 ## Base de datos (ya existe, NO la generes con Hibernate)
 - MariaDB 11.4 en el servidor del equipo, accesible por Tailscale.
-- URL: `jdbc:mariadb://100.79.155.84:3307/litecraft_db` · usuario `litecraft_app` · la contraseña me la pasa Sandro.
+- URL: `jdbc:mariadb://100.79.155.84:3307/litecraft_db` · usuario `litecraft_user` · la contraseña me la pasa Sandro.
 - `spring.jpa.hibernate.ddl-auto=validate` (las entidades deben coincidir EXACTAMENTE con `schema.sql`: nombres de tabla y columna en snake_case, `rol` es ENUM('USER','ADMIN'), `categorias.id` es INT y el resto BIGINT).
 - Las credenciales van en variables de entorno: `application.yml` usa `${DB_URL}`, `${DB_USER}`, `${DB_PASSWORD}`, `${JWT_SECRET}`, `${UPLOAD_DIR:./uploads}`. Crea también `application-example.yml` documentado. **Ningún secreto en el código** (el repo es compartido).
 
