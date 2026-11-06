@@ -1,0 +1,17 @@
+# Copia este archivo como application.yml y rellena las variables de entorno en tu IDE
+spring:
+  datasource:
+    url: ${DB_URL} # ej: jdbc:mariadb://100.79.155.84:3307/litecraft_db
+    username: ${DB_USER} # litecraft_user
+    password: ${DB_PASSWORD} # Pídesela a Sandro
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate # Valida contra schema.sql, NO genera tablas
+    show-sql: true
+
+jwt:
+  secret: ${JWT_SECRET} # String largo en Base64 para firmar tokens
+
+litecraft:
+  upload-dir: ${UPLOAD_DIR:./uploads}
