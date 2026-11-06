@@ -1,0 +1,16 @@
+{
+  "name": "desktop",
+  "version": "1.0.0",
+  "description": "Responsable: **Jose Luis Martin** · Issue #3 `Frontend Layout`",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^45.2.3"
+  }
+}
