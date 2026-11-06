@@ -2,7 +2,6 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
-// Ruta del archivo de configuración local
 const getConfigPath = () => path.join(app.getPath('userData'), 'config.json');
 
 function createWindow() {
@@ -20,7 +19,7 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
 }
 
-// --- IPC: Manejo de Configuración y Diálogos ---
+// --- IPC: Configuración y Diálogos ---
 ipcMain.handle('config:get', () => {
     try {
         const configPath = getConfigPath();
@@ -30,7 +29,6 @@ ipcMain.handle('config:get', () => {
     } catch (e) {
         console.error("Error leyendo config:", e);
     }
-    // Configuración por defecto si no existe
     return { carpetaSchematics: null, apiUrl: "http://localhost:8080/api", token: null };
 });
 
@@ -53,6 +51,36 @@ ipcMain.handle('dialog:elegir-carpeta', async () => {
         return result.filePaths[0];
     }
     return null;
+});
+
+// --- IPC: Guardar esquemas en disco ---
+ipcMain.handle('esquema:guardar', async (event, { nombreArchivo, contenidoBase64 }) => {
+    try {
+        const configPath = getConfigPath();
+        if (!fs.existsSync(configPath)) return { ok: false, mensaje: "No hay configuración" };
+
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        const carpeta = config.carpetaSchematics;
+        if (!carpeta) return { ok: false, mensaje: "Carpeta schematics no configurada" };
+
+        let rutaFinal = path.join(carpeta, nombreArchivo);
+
+        let contador = 1;
+        const ext = path.extname(nombreArchivo);
+        const basename = path.basename(nombreArchivo, ext);
+        const dir = path.dirname(rutaFinal);
+
+        while (fs.existsSync(rutaFinal)) {
+            rutaFinal = path.join(dir, `${basename} (${contador})${ext}`);
+            contador++;
+        }
+
+        fs.writeFileSync(rutaFinal, Buffer.from(contenidoBase64, 'base64'));
+        return { ok: true, ruta: rutaFinal };
+    } catch (e) {
+        console.error("Error guardando esquema:", e);
+        return { ok: false, mensaje: e.message };
+    }
 });
 
 app.whenReady().then(() => {
