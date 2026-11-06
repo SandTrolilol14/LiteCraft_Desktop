@@ -3,9 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>LiteCraft Desktop</title>
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/componentes.css">
 </head>
 <body>
-<h1>¡Hola LiteCraft!</h1>
-<p>El frontend está en marcha.</p>
+<!-- Barra superior fija -->
+<header class="navbar">
+    <div class="nav-logo">🧱 LiteCraft</div>
+    <input type="text" class="nav-search" placeholder="Buscar esquemas (próximamente)...">
+    <div class="nav-user" id="nav-user-info">Modo Configuración</div>
+</header>
+
+<!-- Zona de contenido dinámico -->
+<main id="app-container" class="main-content">
+</main>
+
+<script type="module" src="./js/app.js"></script>
 </body>
 </html>
