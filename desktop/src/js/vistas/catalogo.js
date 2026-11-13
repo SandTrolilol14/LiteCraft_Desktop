@@ -1,6 +1,6 @@
 import { getEsquemas, descargarEsquemaMock } from '../api.js';
 
-export async function renderCatalogo(container, onLogout) {
+export async function renderCatalogo(container, onLogout, onGoToSubir) {
     const res = await getEsquemas();
     const esquemas = res.ok ? res.data : [];
 
@@ -8,7 +8,12 @@ export async function renderCatalogo(container, onLogout) {
     <div style="max-width: 1000px; margin: 0 auto;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2>Catálogo de Esquemas</h2>
-        <button id="btn-logout" style="background: #d32f2f; padding: 6px 12px; font-size: 0.85rem;">Cerrar sesión</button>
+        
+        <div style="display: flex; gap: 10px;">
+          <button id="btn-ir-subir" style="background: var(--accent-color); padding: 6px 12px; font-size: 0.85rem;">+ Subir Esquema</button>
+          <button id="btn-logout" style="background: #d32f2f; padding: 6px 12px; font-size: 0.85rem;">Cerrar sesión</button>
+        </div>
+
       </div>
       <p style="color: var(--text-muted); margin-bottom: 25px;">Explora y descarga construcciones directamente a tu carpeta de Minecraft.</p>
       
@@ -33,8 +38,10 @@ export async function renderCatalogo(container, onLogout) {
     </div>
   `;
 
-    // 1. Lógica del botón de cerrar sesión
+    // 1. Lógica de los botones superiores
     container.querySelector('#btn-logout').addEventListener('click', onLogout);
+    container.querySelector('#btn-ir-subir').addEventListener('click', onGoToSubir);
+
     const mensajeAviso = container.querySelector('#mensaje-aviso');
 
     // 2. Lógica de descarga

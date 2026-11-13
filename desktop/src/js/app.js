@@ -2,6 +2,7 @@ import { renderConfiguracion } from './vistas/configuracion.js';
 import { renderLogin } from './vistas/login.js';
 import { renderRegistro } from './vistas/registro.js';
 import { renderCatalogo } from './vistas/catalogo.js';
+import { renderSubir } from './vistas/subir.js';
 
 async function init() {
     const appContainer = document.getElementById('app-container');
@@ -38,12 +39,23 @@ async function init() {
         return;
     }
 
-    // 3. Catálogo principal
-    navUser.textContent = 'Catálogo activo';
-    renderCatalogo(appContainer, async () => {
-        await window.litecraft.setConfig({ ...config, token: null });
-        init();
-    });
+    // 3. Catálogo principal y Navegación
+    const mostrarCatalogo = () => {
+        navUser.textContent = 'Catálogo activo';
+        renderCatalogo(
+            appContainer,
+            async () => { // Lógica Cerrar Sesión
+                await window.litecraft.setConfig({ ...config, token: null });
+                init();
+            },
+            () => { // Lógica Ir a Subir Esquema
+                navUser.textContent = 'Publicar Esquema';
+                renderSubir(appContainer, mostrarCatalogo);
+            }
+        );
+    };
+
+    mostrarCatalogo();
 }
 
 init();

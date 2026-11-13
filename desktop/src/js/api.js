@@ -7,7 +7,6 @@ export async function getEsquemas() {
     if (USAR_MOCK) {
         return { ok: true, data: MOCK_ESQUEMAS };
     }
-    // Próximamente fetch() real para la Fase 3
 }
 
 export async function loginUser(email, password) {
@@ -33,5 +32,15 @@ export async function descargarEsquemaMock(id) {
         const base64 = btoa(contenidoSimulado);
 
         return { ok: true, nombreArchivo, bytesBase64: base64 };
+    }
+}
+
+export async function subirEsquemaMock(titulo, categoria, descripcion) {
+    if (USAR_MOCK) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve({ ok: true, mensaje: "Esquema subido con éxito al servidor." });
+            }, 800);
+        });
     }
 }
