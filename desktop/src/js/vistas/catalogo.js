@@ -14,9 +14,9 @@ export async function renderCatalogo(container, onLogout) {
       
       <div id="mensaje-aviso" style="display: none; padding: 12px; margin-bottom: 20px; background: #1b5e20; color: #a5d6a7; border-radius: 4px;"></div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+      <div id="grid-esquemas" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
         ${esquemas.map(e => `
-          <div style="background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+          <div class="tarjeta-esquema" style="background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
             <img src="${e.imagen}" alt="${e.titulo}" style="width: 100%; height: 150px; object-fit: cover;" />
             <div style="padding: 15px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
               <div>
@@ -33,9 +33,11 @@ export async function renderCatalogo(container, onLogout) {
     </div>
   `;
 
+    // 1. Lógica del botón de cerrar sesión
     container.querySelector('#btn-logout').addEventListener('click', onLogout);
     const mensajeAviso = container.querySelector('#mensaje-aviso');
 
+    // 2. Lógica de descarga
     container.querySelectorAll('.btn-descargar').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             const id = e.target.getAttribute('data-id');
@@ -56,4 +58,31 @@ export async function renderCatalogo(container, onLogout) {
             }
         });
     });
+
+    // 3. Lógica del buscador en tiempo real
+    const searchInput = document.querySelector('.nav-search');
+    if (searchInput) {
+        searchInput.placeholder = "Buscar por título, autor o categoría...";
+
+        // Clonamos el input para evitar que se acumulen eventos si salimos y entramos al catálogo
+        const nuevoInput = searchInput.cloneNode(true);
+        searchInput.parentNode.replaceChild(nuevoInput, searchInput);
+
+        nuevoInput.addEventListener('input', (e) => {
+            const textoBuscado = e.target.value.toLowerCase();
+            const tarjetas = container.querySelectorAll('.tarjeta-esquema');
+
+            tarjetas.forEach(tarjeta => {
+                // Obtenemos todo el texto de la tarjeta (título, autor, categoría, etc.)
+                const contenidoTarjeta = tarjeta.textContent.toLowerCase();
+
+                // Si el texto buscado está dentro del contenido, mostramos la tarjeta, si no, la ocultamos
+                if (contenidoTarjeta.includes(textoBuscado)) {
+                    tarjeta.style.display = 'flex';
+                } else {
+                    tarjeta.style.display = 'none';
+                }
+            });
+        });
+    }
 }
